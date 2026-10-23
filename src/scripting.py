@@ -17,7 +17,10 @@ def run_script(shell: Shell, path: str, output: TextIO) -> bool:
         print(f"{shell.prompt}{line}", file=output)
         result = shell.execute(line)
         if result.output:
-            print(result.output, file=output)
+            print(
+                result.output, file=output,
+                end="" if result.output.endswith("\n") else "\n",
+            )
         if not result.ok:
             print(f"Script error at line {number}", file=output)
             succeeded = False

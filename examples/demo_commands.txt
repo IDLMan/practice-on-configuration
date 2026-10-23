@@ -1,0 +1,13 @@
+# Проверка основных команд с вложенной VFS.
+pwd
+ls
+ls /docs
+ls /notes.txt
+cd /docs/tutorial
+pwd
+ls .
+tac lesson.txt
+cd ..
+pwd
+tac readme.txt
+exit

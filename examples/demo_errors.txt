@@ -1,0 +1,8 @@
+# Каждая ошибка должна выводиться с номером строки.
+ls /missing
+cd /notes.txt
+pwd unexpected
+tac /bin/image.bin
+tac /missing.txt
+unknown-command
+exit
