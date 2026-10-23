@@ -74,6 +74,27 @@ class VirtualFileSystem:
             raise VFSError(f"Is a directory: {path}")
         return entry.content
 
+    def copy_file(
+        self, source: str, destination: str, current: str = "/",
+    ) -> str:
+        """Копировать файл в памяти с UNIX-подобной семантикой cp."""
+        source_path = self.normalize(source, current)
+        target_path = self.normalize(destination, current)
+        content = self.read_file(source_path)
+        target = self.entries.get(target_path)
+        if target is not None and target.is_dir:
+            target_path = posixpath.join(
+                target_path, posixpath.basename(source_path),
+            )
+        existing = self.entries.get(target_path)
+        if existing is not None and existing.is_dir:
+            raise VFSError(f"Cannot overwrite directory: {target_path}")
+        self.require_dir(posixpath.dirname(target_path))
+        if target_path == source_path:
+            raise VFSError("Source and destination are the same file")
+        self.entries[target_path] = Entry(is_dir=False, content=content)
+        return target_path
+
     @staticmethod
     def decode_content(path: str, encoded: str) -> bytes:
         """Декодировать base64 с диагностикой некорректных данных."""

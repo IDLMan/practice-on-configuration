@@ -1,0 +1,7 @@
+# Все ошибки cp проверяются с сообщением и номером строки.
+cp
+cp /missing /notes.txt
+cp /docs /docs/readme.txt
+cp /notes.txt /not-exist/new.txt
+cp /notes.txt /notes.txt
+exit

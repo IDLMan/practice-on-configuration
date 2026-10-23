@@ -1,0 +1,13 @@
+# Проверка cp и всех ранее реализованных команд.
+pwd
+ls /docs
+cp /notes.txt /docs
+ls /docs
+tac /docs/notes.txt
+cp /docs/tutorial/lesson.txt /docs/lesson-copy.txt
+tac /docs/lesson-copy.txt
+cp /docs/readme.txt /docs/tutorial/lesson.txt
+tac /docs/tutorial/lesson.txt
+cd /docs/tutorial
+pwd
+exit

@@ -35,8 +35,20 @@ class ConfigTests(unittest.TestCase):
         """Пути внутри JSON разрешаются относительно самого JSON."""
         self.write_config({"script": "demo.txt", "vfs": "data.csv"})
         settings = get_settings(["--config", str(self.path)])
-        self.assertEqual(settings.script, str(self.path.parent / "demo.txt"))
-        self.assertEqual(settings.vfs, str(self.path.parent / "data.csv"))
+        self.assertEqual(
+            Path(settings.script).name,
+            "demo.txt",
+        )
+        self.assertTrue(
+            Path(settings.script).parent.samefile(self.path.parent)
+        )
+        self.assertEqual(
+            Path(settings.vfs).name,
+            "data.csv",
+        )
+        self.assertTrue(
+            Path(settings.vfs).parent.samefile(self.path.parent)
+        )
 
     def test_invalid_json(self) -> None:
         """Ошибки синтаксиса JSON обнаруживаются до запуска."""
