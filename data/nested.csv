@@ -1,0 +1,9 @@
+path,kind,content_base64
+/,dir,
+/docs,dir,
+/docs/readme.txt,file,bGluZSBvbmUKbGluZSB0d28KbGluZSB0aHJlZQo=
+/docs/tutorial,dir,
+/docs/tutorial/lesson.txt,file,YWxwaGEKYmV0YQpnYW1tYQo=
+/bin,dir,
+/bin/image.bin,file,AP9C
+/notes.txt,file,dmlydHVhbCBmaWxlc3lzdGVtCg==

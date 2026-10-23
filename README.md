@@ -1,54 +1,60 @@
 # Эмулятор UNIX shell — вариант 21
 
-Практическая работа № 1; Python 3.10+ без сторонних зависимостей.
+Практическая работа № 1, этапы 1–3. Python 3.10+, только stdlib.
 
-## Этапы 1–2: REPL и конфигурация
+## 1. REPL
 
-CLI выводит приглашение `username@hostname:~$ ` на основе данных реальной ОС.
-Строка разбивается по пробелам; кавычки не поддерживаются по варианту.
-Команды `ls`, `cd` являются заглушками, `exit` завершает приложение.
-Неизвестные команды и недопустимые аргументы `exit` дают ошибку.
+Интерфейс CLI, приглашение `username@hostname:~$ ` из настоящих данных ОС.
+Простой парсер делит ввод по пробелам (кавычки не интерпретируются).
+`ls`, `cd` пока заглушки, печатающие имя и аргументы. `exit` завершает
+оболочку; неизвестная команда и `exit` с аргументами дают ошибку.
 
-Настройки: `--vfs PATH`, `--prompt TEXT`, `--script PATH`, `--config PATH`.
-В JSON допустимы строковые ключи `vfs`, `prompt`, `script`.
-Пути к VFS и скрипту в JSON отсчитываются от папки JSON-файла,
-пути CLI — от текущего рабочего каталога. CLI имеет приоритет над JSON.
-На этапе 2 путь VFS только печатается; загрузка VFS будет на этапе 3.
-При запуске выводятся все четыре настроечных параметра для отладки.
+## 2. Конфигурация
 
-Стартовый сценарий: одна команда на строке, строки и хвосты после `#`
-считаются комментариями (синтаксис Python). Ввод и вывод печатаются
-как диалог. Ошибки фиксируются с номером строки, выполнение продолжается;
-код завершения приложения — 1, если была хотя бы одна ошибка.
-`exit` прекращает выполнение сценария. При `--script` REPL не запускается.
+Параметры `--vfs`, `--prompt`, `--script`, `--config` доступны из CLI,
+ключи JSON: `vfs`, `prompt`, `script`. CLI имеет приоритет над JSON.
+Пути внутри JSON отсчитываются от его каталога, а CLI — от текущего.
+Параметры выводятся в отладочный лог при запуске.
 
-## Запуск, тесты и скрипты ОС
+Стартовый скрипт поддерживает комментарии `#` (в том числе после команд).
+Команда и её ответ печатаются вместе; ошибка отмечается номером строки.
+После сценария приложение завершается; если были ошибки, код возврата 1.
+
+## 3. Виртуальная файловая система (VFS)
+
+CSV-источник загружается в оперативную память, не распаковывается и не
+меняется на диске. Все последующие операции производятся над объектами
+Python, без работы с оригинальными файлами. При отсутствии `--vfs`
+используется `data/nested.csv`. Ошибка загрузки приводит к коду возврата 1.
+
+CSV-схема: `path,kind,content_base64`.
+`path` — канонический абсолютный POSIX-путь (`/docs/file.txt`),
+`kind` — `dir` или `file`, `content_base64` — base64 содержимого файла.
+У директорий содержимое пустое. Корень `/` существует автоматически;
+промежуточные каталоги должны иметь явные записи в CSV.
+Пример: `/docs`, `/docs/tutorial`, `/docs/tutorial/lesson.txt`.
+
+Три тестовых образа: `data/minimal.csv`, `data/files.csv`,
+`data/nested.csv` (3+ уровня, в том числе бинарный файл).
+На этапе 3 `ls`/`cd` остаются заглушками; логика появится на этапе 4.
+
+## Команды для запуска и тестов
 
 ```bash
-python3 -m src.main
-python3 -m src.main --prompt 'custom$ ' --script examples/startup.txt
-python3 -m src.main --config examples/config.json
-python3 -m unittest discover -s tests -v
+./run.sh
 ./run.sh --config examples/config.json
+./run.sh --vfs data/minimal.csv --script examples/demo_vfs.txt
+python3 -m unittest discover -s tests -v
+./examples/run_vfs_minimal.sh
+./examples/run_vfs_files.sh
+./examples/run_vfs_nested.sh
+./examples/run_vfs_error.sh
+./examples/run_vfs_command_errors.sh
 ```
 
-Скрипты реальной ОС: `examples/run_defaults.sh`,
-`examples/run_custom_prompt.sh`, `examples/run_from_config.sh`
-(аналог под Windows — `examples/run_from_config.bat`).
-
-Пример:
-
-```text
-Configuration: None
-VFS: None
-Prompt: custom$ 
-Startup script: examples/startup.txt
-custom$ ls docs
-ls: arguments=['docs']
-custom$ cd /docs
-cd: arguments=['/docs']
-custom$ exit
-```
-
-Linux/macOS: `./run.sh`. Windows: `run.bat`.
-После проверки тестов сохранить второй этап отдельным коммитом.
+Скрипты ОС для конфигурации: `examples/run_defaults.sh`,
+`examples/run_custom_prompt.sh`, `examples/run_from_config.sh`.
+Linux/macOS: `./run.sh`; Windows: `run.bat`.
+Для ошибок команд есть `examples/demo_vfs_errors.txt` и сценарий ОС
+`examples/run_vfs_command_errors.sh`, который проверяет код возврата.
+После успешного тестирования сделать коммит третьего этапа.

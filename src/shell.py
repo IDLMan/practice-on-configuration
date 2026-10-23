@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import getpass
 import socket
 
+from .vfs import VirtualFileSystem
+
 
 @dataclass(frozen=True)
 class Result:
@@ -17,11 +19,16 @@ class Result:
 class Shell:
     """Простая оболочка с командами-заглушками."""
 
-    def __init__(self, prompt: str | None = None) -> None:
+    def __init__(
+        self, prompt: str | None = None,
+        vfs: VirtualFileSystem | None = None,
+    ) -> None:
         """Создать оболочку с приглашением из данных ОС по умолчанию."""
         user = getpass.getuser()
         host = socket.gethostname()
         self.prompt = prompt if prompt is not None else f"{user}@{host}:~$ "
+        self.vfs = vfs
+        self.cwd = "/"
 
     def execute(self, line: str) -> Result:
         """Разделить строку по пробелам и выполнить команду."""

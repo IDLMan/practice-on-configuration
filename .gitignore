@@ -26,3 +26,13 @@ Thumbs.db
 
 # User-local configuration
 .env
+
+# Archives and compiled binaries
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+*.exe
+*.dll
+*.so

@@ -1,0 +1,6 @@
+# Обработка ошибок при загруженной виртуальной файловой системе.
+ls /docs
+unknown-command
+cd /docs
+exit unexpected
+exit

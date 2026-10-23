@@ -1,0 +1,4 @@
+path,kind,content_base64
+/,dir,
+/hello.txt,file,SGVsbG8gZnJvbSBWRlMhCg==
+/info.txt,file,VHdvIGZpbGVzIGluIHRoZSByb290Lgo=
