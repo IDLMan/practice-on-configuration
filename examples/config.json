@@ -1,0 +1,5 @@
+{
+  "vfs": "../data/nested.csv",
+  "prompt": "configured$ ",
+  "script": "startup.txt"
+}
