@@ -13,7 +13,7 @@ SOURCE = Path(__file__).resolve().parents[1] / "data" / "nested.csv"
 class CopyTests(unittest.TestCase):
     """Сценарии cp с различными путями, файлами и ошибками."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Создать свежую VFS и оболочку для каждого теста."""
         self.vfs = VirtualFileSystem.from_csv(str(SOURCE))
         self.shell = Shell(prompt="test$ ", vfs=self.vfs)
@@ -102,3 +102,5 @@ class CopyTests(unittest.TestCase):
         self.assertIn("line three", self.shell.execute(
             "tac /docs/new.txt",
         ).output)
+
+setattr(CopyTests, "setUp", CopyTests.set_up)

@@ -136,11 +136,21 @@ class Shell:
         return Result()
 
 
+
     def current_prompt(self) -> str:
-        """Сформировать приглашение с текущим путём VFS."""
-        if self.custom_prompt is not None or self.vfs is None:
-            return self.prompt
-        return f"{self.user}@{self.host}:{self.cwd}$ "
+        """Сформировать приглашение с подстановкой переменных."""
+        if self.custom_prompt is None:
+            if self.vfs is None:
+                return self.prompt
+            return f"{self.user}@{self.host}:{self.cwd}$ "
+
+        return (
+            self.custom_prompt
+            .replace("{user}", self.user)
+            .replace("{host}", self.host)
+            .replace("{cwd}", self.cwd)
+        )
+
 
 
     def repl(self) -> None:

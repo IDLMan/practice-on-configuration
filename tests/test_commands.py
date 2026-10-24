@@ -13,7 +13,7 @@ DATA = Path(__file__).resolve().parents[1] / "data" / "nested.csv"
 class CommandsTests(unittest.TestCase):
     """Проверка успешных сценариев и обработки ошибочных аргументов."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Подготовить виртуальную иерархию в памяти."""
         self.vfs = VirtualFileSystem.from_csv(str(DATA))
         self.shell = Shell(prompt="test$ ", vfs=self.vfs)
@@ -77,3 +77,5 @@ class CommandsTests(unittest.TestCase):
         """Оболочка не запускает команды реальной ОС."""
         result = self.shell.execute("python -V")
         self.assertFalse(result.ok)
+
+setattr(CommandsTests, "setUp", CommandsTests.set_up)

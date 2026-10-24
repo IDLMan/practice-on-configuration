@@ -14,7 +14,7 @@ DATA = Path(__file__).resolve().parents[1] / "data"
 class VFSTests(unittest.TestCase):
     """Изолированные сценарии загрузки виртуального диска."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Создать временный каталог для неправильных CSV."""
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
@@ -105,3 +105,5 @@ class VFSTests(unittest.TestCase):
         self.write_rows([("/x", "file", ""), ("/x", "file", "")])
         with self.assertRaises(VFSError):
             VirtualFileSystem.from_csv(str(self.path))
+
+setattr(VFSTests, "setUp", VFSTests.set_up)

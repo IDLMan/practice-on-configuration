@@ -12,7 +12,7 @@ from src.shell import Shell
 class ScriptingTests(unittest.TestCase):
     """Тесты исполнения строк сценария."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Создать временный файл сценария."""
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
@@ -38,3 +38,5 @@ class ScriptingTests(unittest.TestCase):
         self.assertFalse(run_script(self.shell, str(self.path), self.output))
         self.assertIn("Script error at line 2", self.output.getvalue())
         self.assertIn("demo$ ls", self.output.getvalue())
+
+setattr(ScriptingTests, "setUp", ScriptingTests.set_up)

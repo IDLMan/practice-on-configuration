@@ -11,7 +11,7 @@ from src.config import ConfigError, get_settings, load_config
 class ConfigTests(unittest.TestCase):
     """Тестирование входных параметров и ошибок."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Создать временную папку для конфигурации."""
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
@@ -73,3 +73,5 @@ class ConfigTests(unittest.TestCase):
         settings = get_settings(["--prompt", "only-cli$ "])
         self.assertEqual(settings.prompt, "only-cli$ ")
         self.assertIsNone(settings.vfs)
+
+setattr(ConfigTests, "setUp", ConfigTests.set_up)

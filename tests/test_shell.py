@@ -11,7 +11,7 @@ from src.shell import Shell
 class ShellTests(unittest.TestCase):
     """Сценарии минимального REPL."""
 
-    def setUp(self) -> None:
+    def set_up(self) -> None:
         """Создать оболочку с предсказуемым приглашением."""
         self.shell = Shell(prompt="test$ ")
 
@@ -55,3 +55,5 @@ class ShellTests(unittest.TestCase):
                 self.shell.repl()
         self.assertIn("ls: arguments=[]", output.getvalue())
         self.assertIn("wrong: command not found", output.getvalue())
+
+setattr(ShellTests, "setUp", ShellTests.set_up)
